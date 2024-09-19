@@ -1,0 +1,29 @@
+@import "base/variables";
+@import "base/reset";
+@import "base/typography";
+@import "components/buttons";
+@import "components/forms";
+@import "components/todo";
+@import "layout/header";
+@import "layout/main";
+
+@media (max-width: $tablet) {
+  form {
+    flex-direction: column;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: $mobile) {
+  li {
+    font-size: 1rem;
+  }
+
+  button {
+    padding: 8px 16px;
+  }
+}

@@ -4,27 +4,65 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Go To-Do App</title>
+    <link rel="stylesheet" href="/static/styles/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
   </head>
   <body>
-    <h1>To-Do List</h1>
+    <h1>To-Do List <i class="fas fa-list-ul"></i></h1>
 
     <form action="/add" method="post">
       <input type="text" name="title" placeholder="New to-do" required />
-      <button type="submit">Add</button>
+      <button type="submit">Add <i class="fas fa-plus"></i></button>
     </form>
 
-    <ul>
-      {{range .}}
-      <li>
-        {{.Title}} - {{if .Completed}}Completed{{else}}Pending{{end}}
-        <a href="/complete?id={{.ID.Hex}}">Mark Complete</a>
-        <a href="/delete?id={{.ID.Hex}}">Delete</a>
-      </li>
-      {{end}}
-    </ul>
+    <table>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .}}
+        <tr>
+          <td>{{.Title}}</td>
+          <td>
+            {{if .Completed}}
+            <i class="fas fa-check-circle completed"></i>
+            {{else}}
+            <i class="fas fa-hourglass-half pending"></i>
+            {{end}}
+          </td>
+          <td>
+            {{if .Completed}}
+            <button class="disabled" disabled>
+              <i class="fas fa-check-circle"></i>
+            </button>
+            {{else}}
+            <a
+              href="/complete?id={{.ID.Hex}}"
+              class="complete-btn"
+              title="Mark Complete"
+              ><i class="fas fa-check-circle"></i
+            ></a>
+            {{end}}
+            <a href="/delete?id={{.ID.Hex}}" class="delete-btn" title="Delete"
+              ><i class="fas fa-trash-alt"></i
+            ></a>
+          </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
 
     <form action="/complete-all" method="post">
-      <button type="submit">Mark All as Complete</button>
+      <button type="submit">
+        Mark All As Complete <i class="fas fa-check-circle"></i>
+      </button>
     </form>
   </body>
 </html>

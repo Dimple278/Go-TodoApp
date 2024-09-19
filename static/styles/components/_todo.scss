@@ -1,0 +1,43 @@
+table {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  font-size: 1.2rem;
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid $border-color;
+}
+
+th {
+  background-color: $primary-color;
+  color: white;
+}
+
+td {
+  background-color: #222;
+}
+
+.completed {
+  color: $completed-color;
+}
+
+.pending {
+  color: $pending-color;
+}
+
+.complete-btn,
+.delete-btn {
+  color: $primary-color;
+  font-size: 1.2rem;
+  margin: 0 5px;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: lighten($primary-color, 10%);
+  }
+}

@@ -2,21 +2,8 @@ package main
 
 import (
 	"html/template"
-	"log"
 	"net/http"
 )
-
-// Template cache
-var tmpl *template.Template
-
-func init() {
-	var err error
-	// Pre-parse the template and cache it
-	tmpl, err = template.ParseFiles("views/index.html")
-	if err != nil {
-		log.Fatalf("Unable to load template: %v", err)
-	}
-}
 
 // HomeHandler displays the to-do list and form
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
@@ -26,10 +13,13 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = tmpl.Execute(w, todos)
+	tmpl, err := template.ParseFiles("views/index.html")
 	if err != nil {
-		ErrorHandler(w, "Unable to render template", http.StatusInternalServerError)
+		ErrorHandler(w, "Unable to load template", http.StatusInternalServerError)
+		return
 	}
+
+	tmpl.Execute(w, todos)
 }
 
 // AddToDoHandler adds a new to-do item
