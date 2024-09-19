@@ -42,6 +42,11 @@ func main() {
 	connectMongoDB()
 	initCollection()
 	// Define routes
+	http.HandleFunc("/", HomeHandler)
+	http.HandleFunc("/add", AddToDoHandler)
+	http.HandleFunc("/delete", DeleteToDoHandler)
+	http.HandleFunc("/complete", MarkCompleteHandler)
+	http.HandleFunc("/complete-all", MarkAllCompleteHandler)
 
 	log.Println("Server started on :8080")
 	http.ListenAndServe(":8080", nil)
