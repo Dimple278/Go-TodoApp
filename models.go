@@ -11,7 +11,6 @@ import (
 
 var todoCollection *mongo.Collection
 
-// ToDo represents a single to-do item
 type ToDo struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
 	Title     string             `bson:"title"`
@@ -19,12 +18,10 @@ type ToDo struct {
 	CreatedAt time.Time          `bson:"createdAt"`
 }
 
-// Initialize the collection
 func initCollection() {
 	todoCollection = client.Database("todoApp").Collection("todos")
 }
 
-// AddToDo adds a new to-do item
 func AddToDo(title string) error {
 	newToDo := ToDo{
 		Title:     title,
@@ -36,7 +33,6 @@ func AddToDo(title string) error {
 	return err
 }
 
-// DeleteToDo deletes a to-do item by ID
 func DeleteToDo(id string) error {
 	objID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -47,7 +43,6 @@ func DeleteToDo(id string) error {
 	return err
 }
 
-// ListToDos lists all to-do items
 func ListToDos() ([]ToDo, error) {
 	var todos []ToDo
 
@@ -69,7 +64,6 @@ func ListToDos() ([]ToDo, error) {
 	return todos, nil
 }
 
-// MarkComplete marks a to-do item as complete
 func MarkComplete(id string) error {
 	objID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -84,7 +78,6 @@ func MarkComplete(id string) error {
 	return err
 }
 
-// MarkAllComplete marks all to-do items as complete
 func MarkAllComplete() error {
 	_, err := todoCollection.UpdateMany(
 		context.TODO(),

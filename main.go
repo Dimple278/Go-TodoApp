@@ -42,11 +42,9 @@ func main() {
 	connectMongoDB()
 	initCollection()
 
-	// Serve static files (CSS, JS, etc.)
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	// Define routes
 	http.HandleFunc("/", HomeHandler)
 	http.HandleFunc("/todos", AddToDoHandler)
 	http.HandleFunc("/todos/", DeleteToDoHandler)

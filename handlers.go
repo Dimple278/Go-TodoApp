@@ -23,7 +23,6 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, todos)
 }
 
-// AddToDoHandler adds a new to-do item
 func AddToDoHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		ErrorHandler(w, "Invalid request method", http.StatusMethodNotAllowed)
@@ -45,48 +44,40 @@ func AddToDoHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
-// DeleteToDoHandler deletes a to-do item
-
 func DeleteToDoHandler(w http.ResponseWriter, r *http.Request) {
-	// Ensure we're handling a POST request
+
 	if r.Method != http.MethodPost {
 		ErrorHandler(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	// Check for the _method parameter
 	method := r.URL.Query().Get("_method")
 	if method != "DELETE" {
 		ErrorHandler(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	// Get the URL path and extract the ID
 	path := r.URL.Path
 	if !strings.HasPrefix(path, "/todos/") {
 		ErrorHandler(w, "Invalid URL path", http.StatusBadRequest)
 		return
 	}
 
-	// Extract the ID from the path
 	id := strings.TrimPrefix(path, "/todos/")
 	if id == "" {
 		ErrorHandler(w, "ID is required", http.StatusBadRequest)
 		return
 	}
 
-	// Attempt to delete the to-do by ID
 	err := DeleteToDo(id)
 	if err != nil {
 		ErrorHandler(w, "Unable to delete to-do", http.StatusInternalServerError)
 		return
 	}
 
-	// Redirect after successful deletion
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
-// MarkCompleteHandler marks a to-do item as complete
 func MarkCompleteHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	if id == "" {
@@ -103,7 +94,6 @@ func MarkCompleteHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
-// MarkAllCompleteHandler marks all to-do items as complete
 func MarkAllCompleteHandler(w http.ResponseWriter, r *http.Request) {
 	err := MarkAllComplete()
 	if err != nil {
