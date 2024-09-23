@@ -13,7 +13,7 @@
   <body>
     <h1>To-Do List <i class="fas fa-list-ul"></i></h1>
 
-    <form action="/add" method="post">
+    <form action="/todos" method="post">
       <input type="text" name="title" placeholder="New to-do" required />
       <button type="submit">Add <i class="fas fa-plus"></i></button>
     </form>
@@ -43,23 +43,32 @@
               <i class="fas fa-check-circle"></i>
             </button>
             {{else}}
-            <a
-              href="/complete?id={{.ID.Hex}}"
-              class="complete-btn"
-              title="Mark Complete"
-              ><i class="fas fa-check-circle"></i
-            ></a>
+            <form
+              action="/todos/complete?id={{.ID.Hex}}"
+              method="post"
+              style="display: inline"
+            >
+              <button type="submit" title="Mark Complete">
+                <i class="fas fa-check-circle"></i>
+              </button>
+            </form>
             {{end}}
-            <a href="/delete?id={{.ID.Hex}}" class="delete-btn" title="Delete"
-              ><i class="fas fa-trash-alt"></i
-            ></a>
+            <form
+              action="/todos/{{.ID.Hex}}?_method=DELETE"
+              method="post"
+              style="display: inline"
+            >
+              <button type="submit" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </form>
           </td>
         </tr>
         {{end}}
       </tbody>
     </table>
 
-    <form action="/complete-all" method="post">
+    <form action="/todos/complete-all" method="post">
       <button type="submit">
         Mark All As Complete <i class="fas fa-check-circle"></i>
       </button>

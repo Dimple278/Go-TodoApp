@@ -3,6 +3,7 @@ package main
 import (
 	"html/template"
 	"net/http"
+	"strings"
 )
 
 // HomeHandler displays the to-do list and form
@@ -45,19 +46,43 @@ func AddToDoHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // DeleteToDoHandler deletes a to-do item
+
 func DeleteToDoHandler(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
+	// Ensure we're handling a POST request
+	if r.Method != http.MethodPost {
+		ErrorHandler(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Check for the _method parameter
+	method := r.URL.Query().Get("_method")
+	if method != "DELETE" {
+		ErrorHandler(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Get the URL path and extract the ID
+	path := r.URL.Path
+	if !strings.HasPrefix(path, "/todos/") {
+		ErrorHandler(w, "Invalid URL path", http.StatusBadRequest)
+		return
+	}
+
+	// Extract the ID from the path
+	id := strings.TrimPrefix(path, "/todos/")
 	if id == "" {
 		ErrorHandler(w, "ID is required", http.StatusBadRequest)
 		return
 	}
 
+	// Attempt to delete the to-do by ID
 	err := DeleteToDo(id)
 	if err != nil {
 		ErrorHandler(w, "Unable to delete to-do", http.StatusInternalServerError)
 		return
 	}
 
+	// Redirect after successful deletion
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 

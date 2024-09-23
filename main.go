@@ -48,11 +48,14 @@ func main() {
 
 	// Define routes
 	http.HandleFunc("/", HomeHandler)
-	http.HandleFunc("/add", AddToDoHandler)
-	http.HandleFunc("/delete", DeleteToDoHandler)
-	http.HandleFunc("/complete", MarkCompleteHandler)
-	http.HandleFunc("/complete-all", MarkAllCompleteHandler)
+	http.HandleFunc("/todos", AddToDoHandler)
+	http.HandleFunc("/todos/", DeleteToDoHandler)
+	http.HandleFunc("/todos/complete/", MarkCompleteHandler)
+	http.HandleFunc("/todos/complete-all", MarkAllCompleteHandler)
 
 	log.Println("Server started on :8080")
-	http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Fatalf("Error starting server: %v", err)
+	}
 }
