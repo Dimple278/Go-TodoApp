@@ -1,15 +1,21 @@
-package main
+package models
 
 import (
 	"context"
+	"fmt"
+	"log"
+	"os"
 	"time"
 
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var todoCollection *mongo.Collection
+var client *mongo.Client
 
 type ToDo struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
@@ -18,7 +24,31 @@ type ToDo struct {
 	CreatedAt time.Time          `bson:"createdAt"`
 }
 
-func initCollection() {
+func ConnectMongoDB() {
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	uri := os.Getenv("MONGODB_URI")
+
+	clientOptions := options.Client().ApplyURI(uri)
+
+	client, err = mongo.Connect(context.TODO(), clientOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = client.Ping(context.TODO(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Connected to MongoDB!")
+}
+
+func InitCollection() {
 	todoCollection = client.Database("todoApp").Collection("todos")
 }
 
