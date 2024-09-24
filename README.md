@@ -21,7 +21,7 @@ Prerequisites:
 Installation:
 * Clone the repository: git clone (https://github.com/Dimple278/Go-TodoApp)
 * Install the necessary go packages
-* Run the application: go run main.go
+* Run the application: go run *.go
 The server will start on http://localhost:8080.
 
 Scrennshots:
