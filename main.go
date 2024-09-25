@@ -4,26 +4,19 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Dimple278/Go-TodoApp/controller"
 	"github.com/Dimple278/Go-TodoApp/models"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/Dimple278/Go-TodoApp/router"
 )
 
-var client *mongo.Client
-
 func main() {
+	// Connect to MongoDB and initialize the collection
 	models.ConnectMongoDB()
 	models.InitCollection()
 
-	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	// Setup the routes
+	router.SetupRoutes()
 
-	http.HandleFunc("/", controller.HomeHandler)
-	http.HandleFunc("/todos", controller.AddToDoHandler)
-	http.HandleFunc("/todos/", controller.DeleteToDoHandler)
-	http.HandleFunc("/todos/complete/", controller.MarkCompleteHandler)
-	http.HandleFunc("/todos/complete-all", controller.MarkAllCompleteHandler)
-
+	// Start the server
 	log.Println("Server started on :8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
